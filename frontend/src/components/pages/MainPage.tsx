@@ -140,12 +140,12 @@ const CardContainer = styled.div`
   height: 300px;
   position: fixed;
   bottom: 0;
-  left: 58%;
+  left: 53%;
   transform: translateX(-50%);
   align-items: flex-end;
   padding: 20px;
   border-radius: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 `;
 
 

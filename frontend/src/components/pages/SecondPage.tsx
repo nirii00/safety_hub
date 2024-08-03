@@ -6,7 +6,7 @@ import '../../assets/fonts/Font.css';
 import progressbar from '../../assets/images/progressbar2.svg'; 
 import MaterialForm from '../blocks/materialTypeForm';
 
-const FirstPage: React.FC = () => {
+const SecondPage: React.FC = () => {
     return (
         <Container>
             <Sidebar />
@@ -29,7 +29,7 @@ const FirstPage: React.FC = () => {
     );
 };
 
-export default FirstPage;
+export default SecondPage;
 
 const Container = styled.div`
   display: flex;

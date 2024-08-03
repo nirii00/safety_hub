@@ -1,12 +1,14 @@
-// FirstPage.tsx
+// ThirdPage.tsx
 import React from 'react';
 import Sidebar from '../blocks/Sidebar';
 import styled from 'styled-components';
+import axios from 'axios';
 import '../../assets/fonts/Font.css';
 import progressbar from '../../assets/images/progressbar3.svg'; 
 import DetailForm from '../blocks/detailTypeForm';
 
-const FirstPage: React.FC = () => {
+const ThirdPage: React.FC = () => {
+
     return (
         <Container>
             <Sidebar />
@@ -29,7 +31,7 @@ const FirstPage: React.FC = () => {
     );
 };
 
-export default FirstPage;
+export default ThirdPage;
 
 const Container = styled.div`
   display: flex;
@@ -46,6 +48,7 @@ const FixedContainer = styled.div`
   margin-left: 116px; 
   padding: 20px;
   box-sizing: border-box;
+  overflow-y: auto; /* 세로 스크롤 추가 */
 `;
 
 const ProgressBar = styled.div`
@@ -91,4 +94,28 @@ const FormContainer = styled.div`
   background-color: #F7F7FC;
   border-radius: 20px;
   margin-bottom: 80px; 
+  overflow-y: auto; /* 세로 스크롤 추가 */
+`;
+
+const ButtonContainerBottom = styled.div`
+  display: flex;
+  justify-content: flex-end; /* 버튼들을 오른쪽에 정렬 */
+  width: 100%;
+  margin-top: auto; /* 버튼들을 컨테이너의 맨 아래로 밀기 */
+  padding: 20px 0;
+  box-sizing: border-box;
+`;
+
+const NavButton = styled.button<{ disabled?: boolean }>`
+  background-color: ${({ disabled }) => (disabled ? '#ccc' : '#027b8b')};
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  &:hover {
+    background-color: ${({ disabled }) => (disabled ? '#ccc' : '#025e6b')};
+  }
+  margin-left: 10px;
 `;

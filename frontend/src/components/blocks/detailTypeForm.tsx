@@ -1,32 +1,24 @@
+// DetailTypeForm.tsx
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
+import riskData from '../../assets/risk.json'; // Ensure this path is correct
+import equipmentData from '../../assets/equipment.json'; // Ensure this path is correct
 
 const DetailTypeForm: React.FC = () => {
-    const [riskFactors, setRiskFactors] = useState<string[]>([]);
-    const [recommendedFactors, setRecommendedFactors] = useState<string[]>([]);
+    const { guideId } = useParams<{ guideId: string }>();
+    const navigate = useNavigate();
+    const [riskFactors, setRiskFactors] = useState<string[]>(riskData.ownRisk);
+    const [recommendedFactors, setRecommendedFactors] = useState<string[]>(riskData.risk);
     const [newRiskFactor, setNewRiskFactor] = useState('');
     const [additionalNotes, setAdditionalNotes] = useState('');
-    const [emergencyEquipments, setEmergencyEquipments] = useState<string[]>([]);
+    const [emergencyEquipments, setEmergencyEquipments] = useState<string[]>(equipmentData.equipment.map(e => e.name));
     const [selectedEquipment, setSelectedEquipment] = useState('');
     const [emergencyNotes, setEmergencyNotes] = useState('');
     const [emergencyContacts, setEmergencyContacts] = useState<{ name: string, phone: string, notes: string }[]>([]);
     const [newContact, setNewContact] = useState({ name: '', phone: '', notes: '' });
     const [file, setFile] = useState<File | null>(null);
-
-    useEffect(() => {
-        axios.get('/api/risk-factors')
-            .then(response => setRiskFactors(response.data))
-            .catch(error => console.error(error));
-
-        axios.get('/api/recommended-factors')
-            .then(response => setRecommendedFactors(response.data))
-            .catch(error => console.error(error));
-
-        axios.get('/api/emergency-equipments')
-            .then(response => setEmergencyEquipments(response.data))
-            .catch(error => console.error(error));
-    }, []);
 
     const handleAddRiskFactor = () => {
         if (newRiskFactor.trim() !== '') {
@@ -52,6 +44,27 @@ const DetailTypeForm: React.FC = () => {
         if (e.target.files) {
             setFile(e.target.files[0]);
         }
+    };
+
+    const handleSubmit = () => {
+        const formData = new FormData();
+        formData.append('riskFactors', JSON.stringify(riskFactors));
+        formData.append('additionalNotes', additionalNotes);
+        formData.append('selectedEquipment', selectedEquipment);
+        formData.append('emergencyNotes', emergencyNotes);
+        formData.append('emergencyContacts', JSON.stringify(emergencyContacts));
+        if (file) {
+            formData.append('file', file);
+        }
+
+        axios.post(`/your/api/endpoint`, formData)
+            .then(response => {
+                navigate('/Result');
+            })
+            .catch(error => {
+                console.error(error);
+                navigate('/Result');
+            });
     };
 
     return (
@@ -155,6 +168,10 @@ const DetailTypeForm: React.FC = () => {
                 <Description>비상구, 소화기, AED 위치 등이 표시되어있는 도면을 첨부해주세요.</Description>
                 <FileInput type="file" onChange={handleFileChange} />
             </Section>
+            <ButtonContainerBottom>
+                <NavButton onClick={() => navigate(-1)}>이전으로</NavButton>
+                <NavButton onClick={handleSubmit}>다음으로</NavButton>
+            </ButtonContainerBottom>
         </FormContainer>
     );
 };
@@ -262,8 +279,10 @@ const RecommendationTitle = styled.h3`
 const RecommendationList = styled.ul`
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin-left: 25px;
     text-align: left;
+    margin-top: 0px;
+    font-family: NotoSans-Light;
 `;
 
 const RecommendationItem = styled.li`
@@ -306,7 +325,6 @@ const EmergencyContactItem = styled.li`
     margin-bottom: 10px;
 `;
 
-
 const ContactInfo = styled.span`
     width: 30%;
 `;
@@ -341,4 +359,27 @@ const Divider = styled.hr`
     background: #ddd;
     margin-bottom: 10px;
     padding: 0;
+`;
+
+const ButtonContainerBottom = styled.div`
+    display: flex;
+    justify-content: flex-end; /* 버튼들을 오른쪽에 정렬 */
+    width: 100%;
+    margin-top: auto; /* 버튼들을 컨테이너의 맨 아래로 밀기 */
+    padding: 20px 0;
+    box-sizing: border-box;
+`;
+
+const NavButton = styled.button<{ disabled?: boolean }>`
+  background-color: ${({ disabled }) => (disabled ? '#ccc' : '#027b8b')};
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  &:hover {
+    background-color: ${({ disabled }) => (disabled ? '#ccc' : '#025e6b')};
+  }
+  margin-left: 10px;
 `;

@@ -4,6 +4,7 @@ import MainPage from "./components/pages/MainPage";
 import FirstPage from "./components/pages/FirstPage";
 import SecondPage from "./components/pages/SecondPage";
 import ThirdPage from "./components/pages/ThirdPage";
+import FinalPage from "./components/pages/FinalPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/tenMin" element={<FirstPage />} />
           <Route path="/firstForm" element={<SecondPage />} />
           <Route path="/secondForm" element={<ThirdPage />} />
+          <Route path="/Result" element={<FinalPage />} />
         </Routes>
       </BrowserRouter>
     </div>
